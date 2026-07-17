@@ -1,12 +1,27 @@
+   <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Invitación</title>
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.cdnfonts.com">
+    <link href="https://fonts.cdnfonts.com/css/ss-abigail" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+
     <style>
-        body { margin: 0; font-family: 'SS Abigail', sans-serif; background-color: #f4f4f4; text-align: center; }
-        .content-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 600px; margin: 0 auto; background-color: #FFFFFF; }
-        .full-img { width: 100%; display: block; }
-        .section-colored { background-color: #A2AC86; padding: 20px 0; width: 100%; }
+        /* Eliminamos márgenes generales y unificamos el fondo para que no se vean cortes */
+        body { margin: 0; font-family: 'SS Abigail', sans-serif; background-color: #FFFFFF; text-align: center; width: 100%; overflow-x: hidden; }
+        
+        /* Modificado: Ahora ocupa el 100% real de cualquier celular sin límites */
+        .content-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; margin: 0; background-color: #FFFFFF; }
+        
+        .full-img { width: 100%; display: block; height: auto; }
+        .section-colored { background-color: #A2AC86; padding: 25px 0; width: 100%; }
         .section-light { background-color: #D2D7C7; padding: 30px 0; width: 100%; }
 
         /* Estilos Reproductor */
-        .player { width: 300px; margin: 0 auto; text-align: center; color: #FFFFFF; }
+        .player { width: 85%; max-width: 300px; margin: 0 auto; text-align: center; color: #FFFFFF; }
         .title { font-size: 20px; margin-bottom: 10px; color: #FFFFFF; text-shadow: 0.5px 0 #FFFFFF, -0.5px 0 #FFFFFF, 0 0.5px #FFFFFF, 0 -0.5px #FFFFFF; }
         .bar { height: 2px; background: rgba(255,255,255,0.3); position: relative; margin: 10px 0 18px; }
         .progress { height: 100%; width: 0%; background: #FFFFFF; position: absolute; top: 0; left: 0; }
@@ -19,42 +34,41 @@
         audio { display: none; }
 
         /* Estilos Cuenta Regresiva */
-        .countdown { display:flex; gap:38px; align-items:flex-end; justify-content:center; }
-        .block { text-align:center; position:relative; }
-        .number { font-size:58px; color:#FFFFFF; line-height:1; letter-spacing:2px; font-weight:700; -webkit-text-stroke:0.8px rgba(255,255,255,0.35); text-shadow: 0 1px 0 rgba(255,255,255,0.15), 0 2px 6px rgba(0,0,0,0.15); }
-        .block::after { content:""; display:block; width:36px; height:1px; background:rgba(255,255,255,0.6); margin:8px auto 6px; }
-        .label { font-size:12px; letter-spacing:3px; color:#FFFFFF; font-weight:700; opacity:0.95; -webkit-text-stroke:0.4px rgba(255,255,255,0.35); text-shadow: 0 1px 1px rgba(0,0,0,0.35), 0 0 6px rgba(255,255,255,0.15); }
-        @media(max-width:600px){ .countdown{gap:20px;} .number{font-size:40px;} .label{font-size:10px;} }
+        .countdown { display:flex; gap:25px; align-items:flex-end; justify-content:center; padding: 0 10px; }
+        .block { text-align:center; position:relative; flex: 1; max-width: 70px; }
+        .number { font-size:42px; color:#FFFFFF; line-height:1; letter-spacing:1px; font-weight:700; -webkit-text-stroke:0.8px rgba(255,255,255,0.35); text-shadow: 0 1px 0 rgba(255,255,255,0.15), 0 2px 6px rgba(0,0,0,0.15); }
+        .block::after { content:""; display:block; width:100%; height:1px; background:rgba(255,255,255,0.6); margin:8px auto 6px; }
+        .label { font-size:10px; letter-spacing:2px; color:#FFFFFF; font-weight:700; opacity:0.95; -webkit-text-stroke:0.4px rgba(255,255,255,0.35); text-shadow: 0 1px 1px rgba(0,0,0,0.35), 0 0 6px rgba(255,255,255,0.15); }
 
-        /* AJUSTE DE GALERÍA: Optimizado para celulares sin deformar ni cortar drásticamente las imágenes */
+        /* AJUSTE DE GALERÍA: Ocupa todo el ancho sin deformar */
         .slider-container { 
             position: relative; 
             width: 100%; 
-            aspect-ratio: 4 / 5; /* Proporción ideal para fotos verticales en móvil */
-            max-height: 500px;
+            aspect-ratio: 4 / 5; 
             overflow: hidden; 
-            background: linear-gradient(135deg, #f5f5f5, #e8ebd9); /* Un fondo suave que combina con tu paleta verde */
+            background: linear-gradient(135deg, #f5f5f5, #e8ebd9);
         }
         .slider-container img { 
             position: absolute; 
             inset: 0; 
             width: 100%; 
             height: 100%; 
-            object-fit: contain; /* Evita que la foto se corte o se estire */
+            object-fit: cover; /* Cambiado a cover para llenar por completo el espacio de la galería en pantalla */
             opacity: 0; 
             transition: opacity 1.0s ease-in-out; 
         }
         .slider-container img.active { opacity: 1; }
 
-        /* Formulario */
-        .loc-btn { display: inline-block; padding: 15px 40px; background-color: #A2AC86; color: #FFFFFF; border-radius: 50px; text-decoration: none; font-weight: bold; }
-        .container { width: 100%; max-width: 340px; margin: auto; }
-        label.titulo { display: block; margin-top: 28px; font-family: 'Cinzel', serif; font-size: 13px; color: #B38E5D; letter-spacing: 3px; text-transform: uppercase; }
-        input[type="text"], textarea { width: 100%; padding: 12px; border: 1px solid #D1C4B6; border-radius: 12px; background: #FAF6F0; color: #8A7A6B; }
-        .opciones-asistencia { display: flex; border: 1px solid #D1C4B6; border-radius: 12px; background: #FAF6F0; }
-        .opcion-item { flex: 1; padding: 12px; cursor: pointer; font-family: 'Cinzel', serif; font-size: 10px; color: #8A7A6B; }
+        /* Formulario responsivo */
+        .loc-btn { display: inline-block; padding: 15px 40px; background-color: #A2AC86; color: #FFFFFF; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .container { width: 85%; max-width: 400px; margin: auto; }
+        label.titulo { display: block; margin-top: 28px; font-family: 'Cinzel', serif; font-size: 13px; color: #B38E5D; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+        input[type="text"], textarea { width: 100%; padding: 12px; border: 1px solid #D1C4B6; border-radius: 12px; background: #FAF6F0; color: #8A7A6B; box-sizing: border-box; }
+        .opciones-asistencia { display: flex; border: 1px solid #D1C4B6; border-radius: 12px; background: #FAF6F0; overflow: hidden; }
+        .opcion-item { flex: 1; padding: 14px; cursor: pointer; font-family: 'Cinzel', serif; font-size: 12px; color: #8A7A6B; }
+        .opcion-item input { display: none; } /* Esconde el radio button feo por defecto */
         .opcion-item:has(input:checked) { background-color: #A2AC86; color: #FFFFFF; }
-        button { background: #A2AC86; color: #FFFFFF; padding: 16px; border: none; border-radius: 25px; width: 100%; margin-top: 30px; font-family: 'Cinzel', serif; text-transform: uppercase; cursor: pointer; }
+        button { background: #A2AC86; color: #FFFFFF; padding: 16px; border: none; border-radius: 25px; width: 100%; margin-top: 30px; font-family: 'Cinzel', serif; text-transform: uppercase; cursor: pointer; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -84,7 +98,7 @@
                 <div class="block"><div id="days" class="number"></div><div class="label">DÍAS</div></div>
                 <div class="block"><div id="hours" class="number"></div><div class="label">HORAS</div></div>
                 <div class="block"><div id="minutes" class="number"></div><div class="label">MINUTOS</div></div>
-                <div class="block"><div id="seconds" class="number"></div><div class="label">SEGUNDOS</div></div>
+                <div class="block"><div id="seconds" class="number"></div><div class="label">SEGS</div></div>
             </div>
         </section>
     </div>
