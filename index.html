@@ -1,4 +1,4 @@
-   <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -10,9 +10,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 
     <style>
-        /* Eliminamos márgenes generales y unificamos el fondo para que no se vean cortes */
-        body { margin: 0; font-family: 'SS Abigail', sans-serif; background-color: #FFFFFF; text-align: center; width: 100%; overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
+        /* Eliminamos márgenes generales y unificamos el fondo para que no se vean cortes */
+        html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'SS Abigail', sans-serif; background-color: #A2AC86; text-align: center; }
+        
+        /* SOBRE VERDE INTERACTIVO */
+        .fullscreen-wrapper { width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; position: relative; z-index: 1; }
+        .envelope-container { position: absolute; width: 100%; height: 100%; background-color: #A2AC86; cursor: pointer; display: flex; justify-content: center; align-items: center; perspective: 1500px; z-index: 10; }
+        .flap { position: absolute; left: 0; width: 0; height: 0; border-style: solid; transition: transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94); backface-visibility: hidden; }
+        
+        /* Tonos verdes alineados a la paleta #A2AC86 */
+        .envelope-flap-top { top: 0; border-width: 48vh 50vw 0 50vw; border-color: #939D78 transparent transparent transparent; transform-origin: top; z-index: 4; }
+        .envelope-flap-bottom { bottom: 0; border-width: 0 50vw 48vh 50vw; border-color: transparent transparent #88926E transparent; transform-origin: bottom; z-index: 2; }
+        .envelope-flap-left { top: 0; border-width: 50vh 0 50vh 50vw; border-color: transparent transparent transparent #8E9873; z-index: 1; }
+        .envelope-flap-right { top: 0; right: 0; left: auto; border-width: 50vh 50vw 50vh 0; border-color: transparent #8E9873 transparent transparent; z-index: 1; }
+        
+        .center-group { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5; transition: opacity 0.3s ease; }
+        .seal { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; box-shadow: 0 5px 20px rgba(0,0,0,0.15); margin-bottom: 20px; border: 2px solid rgba(255, 255, 255, 0.4); }
+        .view-text { font-size: 13px; color: #3A4228; font-weight: 500; font-family: 'Cinzel', serif; text-transform: uppercase; letter-spacing: 2.5px; background-color: rgba(255, 255, 255, 0.92); padding: 8px 18px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); border: 1px solid #D2D7C7; }
+
+        /* CONTENEDOR DE LA INVITACIÓN */
+        .invitation-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; visibility: hidden; transition: opacity 0.8s ease 0.4s; z-index: 3; overflow-y: auto; -webkit-overflow-scrolling: touch; background-color: #FFFFFF; }
+        
+        .open .envelope-flap-top { transform: rotateX(-180deg); }
+        .open .envelope-flap-bottom { transform: rotateX(180deg); }
+        .open .center-group { opacity: 0; visibility: hidden; }
+        .open .invitation-wrapper { opacity: 1; visibility: visible; z-index: 20; }
+
         /* Modificado: Ahora ocupa el 100% real de cualquier celular sin límites */
         .content-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; margin: 0; background-color: #FFFFFF; }
         
@@ -73,75 +98,103 @@
 </head>
 <body>
 
-<div class="content-wrapper">
-    <img src="portada.jpg" class="full-img">
+<div class="fullscreen-wrapper">
 
-    <div class="section-colored">
-        <div class="player">
-            <div class="title">Dale play a mi canción</div>
-            <div class="bar"><div class="progress" id="progress"></div><div class="dot" id="dot"></div></div>
-            <div class="controls">
-                <div class="btn" onclick="audio.currentTime -= 10"><svg viewBox="0 0 24 24"><path d="M11 19V5l-9 7 9 7zm2-14v14l9-7-9-7z"/></svg></div>
-                <div class="play" onclick="togglePlay()"><svg id="icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-                <div class="btn" onclick="audio.currentTime += 10"><svg viewBox="0 0 24 24"><path d="M13 5v14l9-7-9-7zm-2 14V5l-9 7 9 7z"/></svg></div>
-            </div>
-            <audio id="audio"><source src="https://regalalasestrellas.weebly.com/uploads/1/3/2/0/132094004/jane_zhang_-_dream_it_possible__lyrics_.mp3"></audio>
+    <!-- SOBRE VERDE INTERACTIVO -->
+    <div class="envelope-container" id="envelope" onclick="openEnvelope()">
+        <div class="flap envelope-flap-top"></div>
+        <div class="flap envelope-flap-left"></div>
+        <div class="flap envelope-flap-right"></div>
+        <div class="flap envelope-flap-bottom"></div>
+
+        <div class="center-group">
+            <img src="https://i.imgur.com/L6c3P4x.png" alt="Sello" class="seal">
+            <div class="view-text">Ver invitación</div>
         </div>
-    </div>
 
-    <img src="entrada.jpg" class="full-img">
-    <img src="papas y padrinos.jpg" class="full-img">
+        <!-- CONTENIDO DE LA INVITACIÓN DENTRO DEL SOBRE -->
+        <div class="invitation-wrapper">
+            <div class="content-wrapper">
+                <img src="portada.jpg" class="full-img">
 
-    <div class="section-colored">
-        <section>
-            <div class="countdown">
-                <div class="block"><div id="days" class="number"></div><div class="label">DÍAS</div></div>
-                <div class="block"><div id="hours" class="number"></div><div class="label">HORAS</div></div>
-                <div class="block"><div id="minutes" class="number"></div><div class="label">MINUTOS</div></div>
-                <div class="block"><div id="seconds" class="number"></div><div class="label">SEGS</div></div>
-            </div>
-        </section>
-    </div>
-
-    <img src="titulo.jpg" class="full-img">
-    <div class="section-light"><a href="#" class="loc-btn">VER UBICACIÓN</a></div>
-    <img src="fecha.jpg" class="full-img">
-    <div class="section-light"><a href="#" class="loc-btn">VER UBICACIÓN</a></div>
-    <img src="vestimenta.jpg" class="full-img">
-    
-    <img src="galeria.jpg" class="full-img">
-    <!-- Galería -->
-    <div class="slider-container">
-        <img src="https://i.imgur.com/gdSftxX.jpeg" class="active">
-        <img src="https://i.imgur.com/JGwlEoc.jpeg">
-        <img src="https://i.imgur.com/OgseElR.jpeg">
-        <img src="https://i.imgur.com/2wa2pyB.jpeg">
-        <img src="https://i.imgur.com/uDYCvFS.jpeg">
-        <img src="https://i.imgur.com/g8WcMS8.jpeg">
-    </div>
-
-    <img src="regalos.jpg" class="full-img">
-    <img src="confirmacion.jpg" class="full-img">
-
-    <div class="section-light">
-        <div class="container">
-            <form id="rsvpForm">
-                <label class="titulo">Nombre Completo</label>
-                <input type="text" name="nombre" required>
-                <label class="titulo">¿Asistirás?</label>
-                <div class="opciones-asistencia">
-                    <label class="opcion-item"><input type="radio" name="asistencia" value="1" checked> SÍ</label>
-                    <label class="opcion-item"><input type="radio" name="asistencia" value="0"> NO</label>
+                <div class="section-colored">
+                    <div class="player">
+                        <div class="title">Dale play a mi canción</div>
+                        <div class="bar"><div class="progress" id="progress"></div><div class="dot" id="dot"></div></div>
+                        <div class="controls">
+                            <div class="btn" onclick="audio.currentTime -= 10"><svg viewBox="0 0 24 24"><path d="M11 19V5l-9 7 9 7zm2-14v14l9-7-9-7z"/></svg></div>
+                            <div class="play" onclick="togglePlay()"><svg id="icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                            <div class="btn" onclick="audio.currentTime += 10"><svg viewBox="0 0 24 24"><path d="M13 5v14l9-7-9-7zm-2 14V5l-9 7 9 7z"/></svg></div>
+                        </div>
+                        <audio id="audio"><source src="https://regalalasestrellas.weebly.com/uploads/1/3/2/0/132094004/jane_zhang_-_dream_it_possible__lyrics_.mp3"></audio>
+                    </div>
                 </div>
-                <label class="titulo">Mensaje</label>
-                <textarea name="mensaje" rows="3"></textarea>
-                <button type="submit">Enviar</button>
-            </form>
+
+                <img src="entrada.jpg" class="full-img">
+                <img src="papas y padrinos.jpg" class="full-img">
+
+                <div class="section-colored">
+                    <section>
+                        <div class="countdown">
+                            <div class="block"><div id="days" class="number"></div><div class="label">DÍAS</div></div>
+                            <div class="block"><div id="hours" class="number"></div><div class="label">HORAS</div></div>
+                            <div class="block"><div id="minutes" class="number"></div><div class="label">MINUTOS</div></div>
+                            <div class="block"><div id="seconds" class="number"></div><div class="label">SEGS</div></div>
+                        </div>
+                    </section>
+                </div>
+
+                <img src="titulo.jpg" class="full-img">
+                <div class="section-light"><a href="#" class="loc-btn">VER UBICACIÓN</a></div>
+                <img src="fecha.jpg" class="full-img">
+                <div class="section-light"><a href="#" class="loc-btn">VER UBICACIÓN</a></div>
+                <img src="vestimenta.jpg" class="full-img">
+                
+                <img src="galeria.jpg" class="full-img">
+                <!-- Galería -->
+                <div class="slider-container">
+                    <img src="https://i.imgur.com/gdSftxX.jpeg" class="active">
+                    <img src="https://i.imgur.com/JGwlEoc.jpeg">
+                    <img src="https://i.imgur.com/OgseElR.jpeg">
+                    <img src="https://i.imgur.com/2wa2pyB.jpeg">
+                    <img src="https://i.imgur.com/uDYCvFS.jpeg">
+                    <img src="https://i.imgur.com/g8WcMS8.jpeg">
+                </div>
+
+                <img src="regalos.jpg" class="full-img">
+                <img src="confirmacion.jpg" class="full-img">
+
+                <div class="section-light">
+                    <div class="container">
+                        <form id="rsvpForm">
+                            <label class="titulo">Nombre Completo</label>
+                            <input type="text" name="nombre" required>
+                            <label class="titulo">¿Asistirás?</label>
+                            <div class="opciones-asistencia">
+                                <label class="opcion-item"><input type="radio" name="asistencia" value="1" checked> SÍ</label>
+                                <label class="opcion-item"><input type="radio" name="asistencia" value="0"> NO</label>
+                            </div>
+                            <label class="titulo">Mensaje</label>
+                            <textarea name="mensaje" rows="3"></textarea>
+                            <button type="submit">Enviar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
 
 <script>
+    let isOpen = false;
+    function openEnvelope() {
+        if (!isOpen) {
+            isOpen = true;
+            document.getElementById('envelope').classList.add('open');
+        }
+    }
+
     const audio = document.getElementById("audio"), icon = document.getElementById("icon"), progress = document.getElementById("progress"), dot = document.getElementById("dot");
     function togglePlay(){
         if(audio.paused){ audio.play(); icon.innerHTML = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>'; }
