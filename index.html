@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis 15 Años</title>
+
+    <!-- Etiquetas Open Graph para la miniatura de WhatsApp -->
+    <meta property="og:title" content="Mis 15 Años">
+    <meta property="og:description" content="Te invito a celebrar este momento tan especial conmigo. Haz click para abrir tu invitación.">
+    <meta property="og:image" content="portada.jpg">
+    <meta property="og:url" content="">
+    <meta property="og:type" content="https://invitaendigitalweb-svg.github.io/xvbrithany">
+
+    <link rel="preconnect" href="https://fonts.cdnfonts.com">
+    <link href="https://fonts.cdnfonts.com/css/ss-abigail" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            background-color: #e8e2d8;
+            font-family: 'SS Abigail', serif;
+        }
+
+        /* Pantalla de bienvenida / Sobre inicial */
+        #welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f9f6f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            transition: opacity 1s ease, visibility 1s ease;
+            cursor: pointer;
+        }
+
+        #welcome-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+        }
+
+        /* Contenedor principal estilo tarjeta móvil centrada */
+        .invitation-wrapper {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            background-color: #f9f6f0;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #main-content {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1.5s ease;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section-img {
+            width: 100%;
+            background-color: #f9f6f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 0;
+            font-size: 0;
+        }
+
+        .section-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Animación de entrada con zoom elegante */
+        .animate-zoom {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+        }
+
+        .animate-zoom.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Animación especial flotante/deslizante para vestimenta y regalos */
+        .animate-float {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+        }
+
+        .animate-float.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animación padrisima especial (Flip 3D con destello) para la sección de Asistencia */
+        .animate-flip-special {
+            opacity: 0;
+            transform: perspective(1000px) rotateX(25deg) scale(0.85);
+            filter: brightness(1.2);
+            transition: opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1), transform 1.4s cubic-bezier(0.16, 1, 0.3, 1), filter 1.4s ease;
+        }
+
+        .animate-flip-special.active {
+            opacity: 1;
+            transform: perspective(1000px) rotateX(0deg) scale(1);
+            filter: brightness(1);
+        }
+
+        /* Sección de la cuenta regresiva en fondo blanco */
+        .countdown-section {
+            width: 100%;
+            padding: 40px 20px 30px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+        }
+
+        .countdown {
+            display: flex;
+            gap: 35px;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .block {
+            text-align: center;
+            position: relative;
+        }
+
+        .number {
+            font-size: 50px;
+            color: #BB9885;
+            line-height: 1;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 8px rgba(187, 152, 133, 0.25);
+        }
+
+        .block::after {
+            content: "";
+            display: block;
+            width: 32px;
+            height: 1px;
+            background: rgba(187, 152, 133, 0.4);
+            margin: 8px auto 6px;
+        }
+
+        .label {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: #A37E6B;
+        }
+
+        /* Sección de Ceremonia y Ubicación */
+        .location-section {
+            width: 100%;
+            background-color: #F9EEEB;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 20px 45px 20px;
+        }
+
+        .location-section img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Sección de Recepción */
+        .reception-section {
+            width: 100%;
+            background-color: #F9EEEB;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 20px 45px 20px;
+        }
+
+        .reception-section img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Sección de la imagen de título de galería */
+        .gallery-title-section {
+            width: 100%;
+            background-color: #f9f6f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 0;
+            font-size: 0;
+        }
+
+        .gallery-title-section img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Sección del Carrusel con altura extendida */
+        .gallery-section {
+            width: 100%;
+            background-color: #f9f6f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 0;
+            font-size: 0;
+            padding: 0;
+            margin: 0;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 600px; 
+            overflow: hidden;
+            background: #f9f6f0;
+        }
+
+        .slider-container img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+        }
+
+        .slider-container img.active {
+            opacity: 1;
+        }
+
+        /* Botón personalizado de ubicación (Letras más gruesas añadidas aquí) */
+        .location-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 28px;
+            background-color: #E5A6AC;
+            color: #ffffff;
+            font-family: 'SS Abigail', serif;
+            font-size: 13px;
+            font-weight: 700; /* <--- Esto hace que las letras se vean más gruesas */
+            letter-spacing: 2px;
+            text-decoration: none;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(229, 166, 172, 0.3);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .location-btn:hover {
+            transform: scale(1.05);
+            background-color: #d8959b;
+        }
+
+        /* Estilos integrados para el Formulario de Asistencia con fondo #F9EEEB */
+        .rsvp-container-wrapper {
+            width: 100%;
+            background-color: #F9EEEB;
+            padding: 20px 15px 40px 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .rsvp-inner {
+            width: 100%;
+            max-width: 350px;
+            margin: auto;
+            color: #333333;
+        }
+
+        .rsvp-inner label.titulo {
+            display: block;
+            margin-top: 20px;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            letter-spacing: 1px;
+        }
+
+        .rsvp-inner input[type="text"], .rsvp-inner textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            background-color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 5px;
+        }
+
+        .rsvp-inner .opciones {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .rsvp-inner .opcion-item {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+        }
+
+        .rsvp-inner .opcion-item input {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: #EAB1B1;
+        }
+
+        .rsvp-inner button {
+            background-color: #EAB1B1;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 25px;
+            font-size: 15px;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .rsvp-inner button:hover {
+            filter: brightness(1.1);
+        }
+
+        .rsvp-inner button.cargando {
+            background-color: #FFD9EC !important;
+            color: #333333 !important;
+            cursor: not-allowed;
+        }
+
+        .rsvp-inner #exito {
+            display: none;
+            text-align: center;
+            padding: 30px 5px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .rsvp-inner #exito h3 {
+            color: #EAB1B1;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        /* Control de Música */
+        #music-control {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 55px;
+            height: 55px;
+            background-color: #ffd1dc;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 100;
+            border: 2px solid #ffffff;
+            transition: transform 0.3s ease;
+        }
+
+        #music-control:hover {
+            transform: scale(1.1);
+        }
+
+        #music-control svg {
+            width: 24px;
+            height: 24px;
+            fill: #555555;
+        }
+
+        .hidden {
+            opacity: 0;
+            visibility: hidden;
+            display: none;
+        }
+
+        @media(max-width: 480px) {
+            .invitation-wrapper {
+                max-width: 100%;
+                box-shadow: none;
+            }
+            .countdown { gap: 20px; }
+            .number { font-size: 42px; }
+            .label { font-size: 10px; }
+            .slider-container { height: 520px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Pantalla de Bienvenida -->
+    <div id="welcome-screen" title="Haz clic para abrir">
+        <img src="foto.jpg" alt="Sobre de invitación">
+    </div>
+
+    <!-- Contenedor general en formato tarjeta estilo celular -->
+    <div class="invitation-wrapper">
+        <!-- Contenido Principal -->
+        <div id="main-content">
+            <!-- 1. Foto de Portada -->
+            <section class="section-img">
+                <img src="portada.jpg" alt="Portada de la invitación de Mis 15 Años">
+            </section>
+
+            <!-- 2. Foto de Frase -->
+            <section class="section-img">
+                <img src="frase.jpg" alt="Frase de Mis 15 Años" class="animate-zoom">
+            </section>
+
+            <!-- 3. Foto de Fecha -->
+            <section class="section-img">
+                <img src="fecha.jpg" alt="Fecha de Mis 15 Años" class="animate-zoom">
+            </section>
+
+            <!-- 4. Cuenta Regresiva -->
+            <section class="countdown-section">
+                <div class="countdown">
+                    <div class="block">
+                        <div id="days" class="number">0</div>
+                        <div class="label">DÍAS</div>
+                    </div>
+                    <div class="block">
+                        <div id="hours" class="number">00</div>
+                        <div class="label">HORAS</div>
+                    </div>
+                    <div class="block">
+                        <div id="minutes" class="number">00</div>
+                        <div class="label">MINUTOS</div>
+                    </div>
+                    <div class="block">
+                        <div id="seconds" class="number">00</div>
+                        <div class="label">SEGUNDOS</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Foto de Ceremonia y Ubicación -->
+            <section class="location-section">
+                <img src="ceremonia.jpg" alt="Detalles de ceremonia" class="animate-zoom">
+                <a href="https://www.google.com/maps/place/Parroquia+del+Sagrado+Coraz%C3%B3n+de+Jes%C3%BAs/@28.6262123,-106.0734464,859m/data=!3m2!1e3!4b1!4m6!3m5!1s0x86ea5caebcfb39a9:0x7142c0ef10e82b9b!8m2!3d28.6262123!4d-106.0711241!16s%2Fg%2F1tgdcw5w!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDcyOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="location-btn">VER UBICACIÓN</a>
+            </section>
+
+            <!-- 6. Foto de Recepción y Ubicación -->
+            <section class="reception-section">
+                <img src="recepcion.jpg" alt="Detalles de recepción" class="animate-zoom">
+                <a href="https://www.google.com/maps/place/Quinta+kiri,+C.+Guadalupe+Posadas,+11+de+Febrero+Sur,+31066+Chihuahua,+Chih./data=!4m2!3m1!1s0x86ea5bac27293f75:0x64a47b49dd5ce364!18m1!1e1?utm_source=mstt_1&entry=gps&coh=192189&g_ep=CAESBzI2LjI5LjIYACCenQoqnwEsOTQyNjc3MjcsOTQyOTIxOTUsOTQyOTk1MzIsMTAwNzk2NDk4LDEwMDc5Nzc2MSwxMDA3OTY1MzUsOTQyODA1NzYsOTQyMDczOTQsOTQyMDc1MDYsOTQyMDg1MDYsOTQyMTg2NTMsOTQyMjk4MzksOTQyNzUxNjgsOTQyNzk2MTksMTAwODE1NjM1LDEwMDgyMDIzNywxMDA4MjI0ODlCAk1Y&skid=04858c28-c6d2-4605-bc97-a16742ce76be&g_st=aw" target="_blank" class="location-btn">VER UBICACIÓN</a>
+            </section>
+
+            <!-- 7. Foto Título de Galería -->
+            <section class="gallery-title-section">
+                <img src="galeria.jpg" alt="Galería de Mis 15 Años" class="animate-zoom">
+            </section>
+
+            <!-- 8. Carrusel de Fotos -->
+            <section class="gallery-section">
+                <div class="slider-container animate-zoom">
+                    <img src="https://i.imgur.com/MSYBfYT.jpeg" class="active" alt="Foto 1">
+                    <img src="https://i.imgur.com/OwS4Q50.png" alt="Foto 2">
+                    <img src="https://i.imgur.com/L67IlOh.jpeg" alt="Foto 3">
+                </div>
+            </section>
+
+            <!-- 9. Foto de Vestimenta -->
+            <section class="section-img">
+                <img src="vestimenta.jpg" alt="Código de vestimenta" class="animate-float">
+            </section>
+
+            <!-- 10. Foto de Regalo -->
+            <section class="section-img">
+                <img src="regalo.jpg" alt="Sugerencia de regalo" class="animate-float">
+            </section>
+
+            <!-- 11. Foto de Asistencia con Animación y Formulario Integrado con Fondo #F9EEEB -->
+            <section class="section-img" style="flex-direction: column;">
+                <img src="asistencia.jpg" alt="Confirmar asistencia" class="animate-flip-special" style="margin-bottom: 0;">
+                
+                <div class="rsvp-container-wrapper animate-flip-special">
+                    <div class="rsvp-inner">
+                        <div id="formContent">
+                            <form id="rsvpForm">
+                                <label class="titulo">Nombre del invitado</label>
+                                <input type="text" name="nombre" placeholder="Escribe el nombre aquí" required>
+
+                                <label class="titulo">Respuesta</label>
+                                <div class="opciones">
+                                    <label class="opcion-item">
+                                        <input type="radio" name="asistencia" value="Será un placer asistir" checked> Será un placer asistir
+                                    </label>
+                                    <label class="opcion-item">
+                                        <input type="radio" name="asistencia" value="Lo siento, no podré asistir"> Lo siento, no podré asistir
+                                    </label>
+                                </div>
+
+                                <label class="titulo">Mensaje o dedicatoria (Opcional)</label>
+                                <textarea name="mensaje" rows="4" placeholder="Escribe aquí..."></textarea>
+
+                                <button type="submit" id="btn">ENVIAR</button>
+                            </form>
+                        </div>
+
+                        <div id="exito">
+                            <h3>¡Muchas gracias!<br>Tu respuesta ha sido enviada.</h3>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Reproductor de Audio -->
+    <audio id="bg-music" loop>
+        <source src="cancion.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <!-- Botón flotante de música -->
+    <div id="music-control" class="hidden" title="Reproducir / Pausar música">
+        <svg id="icon-speaker" viewBox="0 0 24 24">
+            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+        </svg>
+        <svg id="icon-pause" viewBox="0 0 24 24" style="display: none;">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+        </svg>
+    </div>
+
+    <script>
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const mainContent = document.getElementById('main-content');
+        const bgMusic = document.getElementById('bg-music');
+        const musicControl = document.getElementById('music-control');
+        const iconSpeaker = document.getElementById('icon-speaker');
+        const iconPause = document.getElementById('icon-pause');
+
+        let isPlaying = false;
+
+        welcomeScreen.addEventListener('click', () => {
+            welcomeScreen.style.opacity = '0';
+            setTimeout(() => {
+                welcomeScreen.style.display = 'none';
+            }, 1000);
+
+            mainContent.style.visibility = 'visible';
+            mainContent.style.opacity = '1';
+            musicControl.classList.remove('hidden');
+
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                updateMusicIcon();
+            }).catch(error => {
+                console.log("Reproducción automática bloqueada por el navegador:", error);
+            });
+        });
+
+        musicControl.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                isPlaying = false;
+            } else {
+                bgMusic.play();
+                isPlaying = true;
+            }
+            updateMusicIcon();
+        });
+
+        function updateMusicIcon() {
+            if (isPlaying) {
+                iconSpeaker.style.display = 'none';
+                iconPause.style.display = 'block';
+            } else {
+                iconSpeaker.style.display = 'block';
+                iconPause.style.display = 'none';
+            }
+        }
+
+        /* Animación de entrada al hacer scroll */
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-zoom, .animate-float, .animate-flip-special').forEach(el => {
+            observer.observe(el);
+        });
+
+        /* Script del Carrusel de Fotos */
+        const sliderImages = document.querySelectorAll('.slider-container img');
+        let currentSlide = 0;
+
+        setInterval(() => {
+            sliderImages[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % sliderImages.length;
+            sliderImages[currentSlide].classList.add('active');
+        }, 3000);
+
+        /* Cuenta Regresiva actualizada al 22 de Agosto de 2026 a las 3:00 PM (15:00 hrs) */
+        const DATE_TARGET = new Date(2026, 7, 22, 15, 0, 0);
+
+        const days = document.getElementById('days');
+        const hours = document.getElementById('hours');
+        const minutes = document.getElementById('minutes');
+        const seconds = document.getElementById('seconds');
+
+        const MS = 1000;
+        const MIN = MS * 60;
+        const H = MIN * 60;
+        const D = H * 24;
+
+        function format(n){
+            return n < 10 ? '0' + n : n;
+        }
+
+        (function updateCountdown(){
+            const now = new Date();
+            let dur = DATE_TARGET - now;
+
+            if(dur < 0) dur = 0;
+
+            days.textContent = Math.floor(dur / D);
+            hours.textContent = format(Math.floor((dur % D) / H));
+            minutes.textContent = format(Math.floor((dur % H) / MIN));
+            seconds.textContent = format(Math.floor((dur % MIN) / MS));
+
+            setTimeout(updateCountdown, 1000);
+        })();
+
+        /* Script de Envío del Formulario RSVP */
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwXhDvJ2nnDKJf4QjbcA_0j8qNHaxHVi2cvZ84via3rhDE9pL7wIS7fOEXyIX2Nrps9nw/exec';
+        const form = document.getElementById('rsvpForm');
+        const btn = document.getElementById('btn');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            
+            btn.disabled = true;
+            btn.innerText = 'Enviando...';
+            btn.classList.add('cargando');
+
+            fetch(scriptURL, { 
+                method: 'POST', 
+                body: new FormData(form),
+                mode: 'no-cors'
+            })
+            .then(() => {
+                document.getElementById('formContent').style.display = 'none';
+                document.getElementById('exito').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error!', error.message);
+                alert('Hubo un error al enviar. Revisa tu conexión.');
+                btn.disabled = false;
+                btn.innerText = 'ENVIAR';
+                btn.classList.remove('cargando');
+            });
+        });
+    </script>
+</body>
+</html>
